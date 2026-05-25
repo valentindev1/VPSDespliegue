@@ -1,0 +1,37 @@
+# --- Reglas generales ---
+.DS_Store
+Thumbs.db
+
+# --- Java / Spring Boot (Maven) ---
+target/
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+*.log
+.settings/
+.project
+.classpath
+.springBeans
+.factorypath
+
+# --- Angular / Node.js ---
+node_modules/
+dist/
+.angular/
+.sass-cache/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# --- IDEs y herramientas ---
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# --- Archivos de configuración sensible (¡IMPORTANTE!) ---
+# Nunca subas tus credenciales de base de datos o claves API
+application-local.properties
+.env
