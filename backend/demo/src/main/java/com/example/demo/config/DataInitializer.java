@@ -4,31 +4,46 @@ import com.example.demo.model.usuario.RolUsuario;
 import com.example.demo.model.usuario.Usuario;
 import com.example.demo.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@Configuration // Esto le dice a Spring que esta clase contiene configuraciones al arrancar
+@Configuration
 @RequiredArgsConstructor
 public class DataInitializer {
 
     private final PasswordEncoder passwordEncoder;
 
+    //Variables de entorno
+    @Value("${ADMIN_EMAIL}")
+    private String adminEmail;
+
+    @Value("${ADMIN_NAME}")
+    private String adminName;
+
+    @Value("${ADMIN_LASTNAME}")
+    private String adminLastname;
+
+    @Value("${ADMIN_PASS}")
+    private String adminPass;
 
     @Bean
     CommandLineRunner initDatabase(UsuarioRepository repository) {
         return args -> {
-            // Verificamos si la base de datos está vacía para evitar duplicados
             if (repository.findAll().isEmpty()) {
+
                 Usuario admin = new Usuario();
-                admin.setEmail("admin@hormigonesdelsur.com");
-                admin.setNombre("admin");
-                admin.setApellido("admin");
-                admin.setPassword(passwordEncoder.encode("admin123456"));
+                admin.setEmail(adminEmail);
+                admin.setNombre(adminName);
+                admin.setApellido(adminLastname);
+                admin.setPassword(passwordEncoder.encode(adminPass));
                 admin.setRol(RolUsuario.ADMIN);
+
                 repository.save(admin);
-                System.out.println("Administrador inicial creado exitosamente.");
+
+                System.out.println("✅ Administrador inicial creado desde variables de entorno.");
             }
         };
     }
