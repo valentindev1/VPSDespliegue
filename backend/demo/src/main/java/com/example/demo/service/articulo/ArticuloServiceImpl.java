@@ -212,7 +212,7 @@ public class ArticuloServiceImpl implements ArticuloService {
     }
 
     // =========================
-    // 🔥 MAPEO
+    //MAPEO
     // =========================
     private ArticuloResponseDTO mapToDTO(Articulo articulo) {
 
@@ -225,7 +225,7 @@ public class ArticuloServiceImpl implements ArticuloService {
         dto.setSlug(articulo.getSlug());
         dto.setPublicada(articulo.getPublicada());
         dto.setFechaPublicacion(articulo.getFechaPublicacion());
-
+        dto.setCategoriaId(articulo.getCategoria().getId());
         dto.setCategoria(articulo.getCategoria().getNombre());
         dto.setAutor(articulo.getUsuario().getNombre());
 

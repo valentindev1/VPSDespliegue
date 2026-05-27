@@ -13,6 +13,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
 
 
@@ -26,14 +27,16 @@ public class AuthController {
 
     // ✅ LOGIN
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Map<String, String> request) {
+
+    public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> request) {
 
         String token = authService.login(
                 request.get("email"),
                 request.get("password")
         );
 
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(Map.of("token", token));
     }
+
 
 }

@@ -25,6 +25,8 @@ public class ArticuloRequestDTO {
     @NotNull(message = "El estado de publicación es obligatorio")
     private Boolean publicada;
 
+
+
     @NotNull(message = "La categoría es obligatoria")
     private Long categoriaId;
 

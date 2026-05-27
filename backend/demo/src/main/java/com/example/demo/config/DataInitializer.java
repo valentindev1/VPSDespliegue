@@ -45,7 +45,7 @@ public class DataInitializer {
 
                 repository.save(admin);
 
-                System.out.println("✅ Administrador inicial creado desde variables de entorno.");
+                System.out.println("Administrador inicial creado desde variables de entorno.");
             }
         };
     }

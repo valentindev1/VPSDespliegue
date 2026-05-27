@@ -19,6 +19,8 @@ public class ArticuloResponseDTO {
 
     private String slug;
 
+    private Long categoriaId;
+
     private String categoria;
 
     private String autor;
