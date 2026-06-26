@@ -2,9 +2,6 @@ version: '3.8'
 
 services:
 
-  # =========================
-  # BASE DE DATOS
-  # =========================
   db:
     image: mysql:8.0
     container_name: hormisur_db
@@ -17,9 +14,6 @@ services:
       - db_data:/var/lib/mysql
 
 
-  # =========================
-  # BACKEND
-  # =========================
   backend:
     build: ./backend/demo
     container_name: hormisur_backend
@@ -32,9 +26,6 @@ services:
       - db
 
 
-  # =========================
-  # FRONTEND (ANGULAR)
-  # =========================
   frontend:
     build: ./frontend
     container_name: hormisur_frontend
@@ -44,9 +35,6 @@ services:
       - backend
 
 
-  # =========================
-  # NGINX (LA CLAVE 🔥)
-  # =========================
   nginx:
     image: nginx:latest
     container_name: hormisur_nginx
@@ -63,8 +51,5 @@ services:
       - backend
 
 
-# =========================
-# VOLUMEN DB
-# =========================
 volumes:
   db_data:
