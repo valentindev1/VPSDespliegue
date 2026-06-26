@@ -1,51 +1,70 @@
+version: '3.8'
+
 services:
 
+  # =========================
+  # BASE DE DATOS
+  # =========================
   db:
-    image: mysql:8
-    container_name: backend-db
-
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-
-   
-
-    volumes:
-      - db_data:/var/lib/mysql
-
+    image: mysql:8.0
+    container_name: hormisur_db
     restart: always
-
-
-  backend:
-    build: ./backend/demo
-    container_name: springboot_app
-
-    depends_on:
-      - db
 
     env_file:
       - .env
 
-    ports:
-      - "8080:8080"
+    volumes:
+      - db_data:/var/lib/mysql
 
+
+  # =========================
+  # BACKEND
+  # =========================
+  backend:
+    build: ./backend/demo
+    container_name: hormisur_backend
     restart: always
 
+    env_file:
+      - .env
 
+    depends_on:
+      - db
+
+
+  # =========================
+  # FRONTEND (ANGULAR)
+  # =========================
   frontend:
-    build: ./frontend/frontend-cms
-    container_name: angular_ssr
+    build: ./frontend
+    container_name: hormisur_frontend
+    restart: always
 
     depends_on:
       - backend
 
-    ports:
-      - "4000:4000"
 
+  # =========================
+  # NGINX (LA CLAVE 🔥)
+  # =========================
+  nginx:
+    image: nginx:latest
+    container_name: hormisur_nginx
     restart: always
 
+    ports:
+      - "80:80"
 
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+
+    depends_on:
+      - frontend
+      - backend
+
+
+# =========================
+# VOLUMEN DB
+# =========================
 volumes:
   db_data:
