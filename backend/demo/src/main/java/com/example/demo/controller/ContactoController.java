@@ -16,7 +16,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/contacto")
-@CrossOrigin(origins = "http://localhost:4200") // Permite la conexión desde tu Angular
+
 public class ContactoController {
 
     @Autowired
@@ -104,4 +104,68 @@ public class ContactoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuesta);
         }
     }
+
+
+
+    @PostMapping("/cliente")
+    public ResponseEntity<Map<String, String>> contactoCliente(
+            @RequestBody Map<String, String> datos) {
+
+        Map<String, String> respuesta = new HashMap<>();
+
+        try {
+
+            String nombre = datos.get("nombre");
+            String telefono = datos.get("telefono");
+            String correo = datos.get("correo");
+            String descripcion = datos.get("descripcion");
+
+            // Validación básica
+            if (nombre == null || telefono == null || descripcion == null) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Los campos son obligatorios");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);
+            }
+
+            // Crear correo
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
+
+            // ✅ AQUÍ EL CAMBIO IMPORTANTE
+            helper.setTo("comercial@hormisursas.com.co");
+
+            helper.setFrom("talentohumano@hormisursas.com.co");
+
+            helper.setSubject("Nueva solicitud de cliente - Página Web");
+
+            String cuerpo = String.format(
+                    "Nuevo cliente interesado:\n\n" +
+                            "Nombre: %s\n" +
+                            "Teléfono: %s\n" +
+                            "Correo: %s\n" +
+                            "Descripción de la obra:\n%s",
+                    nombre, telefono, correo, descripcion
+            );
+
+            helper.setText(cuerpo);
+
+            mailSender.send(message);
+
+            respuesta.put("status", "success");
+            respuesta.put("message", "Solicitud enviada correctamente");
+
+            return ResponseEntity.ok(respuesta);
+
+        } catch (Exception e) {
+            e.printStackTrace(); // luego lo cambias por logger
+            respuesta.put("status", "error");
+            respuesta.put("message", "Error interno, intenta nuevamente");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuesta);
+        }
+    }
+
+
+
+
+
 }

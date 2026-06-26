@@ -39,40 +39,31 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                // 🔒 Desactiva CSRF (necesario para APIs REST)
+                // Desactiva CSRF (necesario para APIs REST)
                 .csrf(csrf -> csrf.disable())
 
-                // 🌐 Configuración CORS
+                // Configuración CORS
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                // 🔐 Reglas de seguridad
+                // Reglas de seguridad
                 .authorizeHttpRequests(auth -> auth
 
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         // ENDPOINTS DE AUTENTICACIÓN
-
                         .requestMatchers("/sitemap.xml").permitAll()
-
                         .requestMatchers("/api/auth/**").permitAll()
-
                         .requestMatchers("/robots.txt").permitAll()
-                        // ARCHIVOS
                         .requestMatchers("/uploads/**").permitAll()
-
-                        // FORMULARIO DE CONTACTO (🔥 CLAVE PARA TU CASO)
                         .requestMatchers("/api/contacto/**").permitAll()
-
                         // ENDPOINTS PÚBLICOS
                         .requestMatchers(
                                 "/api/articulo/listar/**",
                                 "/api/articulo/*/*",
-                                "/api/categoria/listar",
-                                "/api/categoria/*"
+                                "/api/categoria/listar"
                         ).permitAll()
-
-                        // 🔒 TODO LO DEMÁS REQUIERE TOKEN (JWT)
+                        //  TODO LO DEMAS REQUIERE TOKEN (JWT)
                         .anyRequest().authenticated()
                 )
-
                 // SIN SESIÓN (porque usas JWT)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -88,18 +79,45 @@ public class SecurityConfig {
     }
 
 
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Tu frontend
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
-        configuration.setAllowCredentials(true);
+        CorsConfiguration config = new CorsConfiguration();
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        config.setAllowedOrigins(Arrays.asList(
+                "https://hormisursas.com.co",
+                "https://www.hormisursas.com.co"
+        ));
+
+        config.setAllowedMethods(Arrays.asList(
+                "GET", "POST", "PUT", "DELETE", "OPTIONS"
+        ));
+
+        config.setAllowedHeaders(Arrays.asList(
+                "Authorization",
+                "Content-Type",
+                "Accept",
+                "Origin"
+        ));
+
+        config.setExposedHeaders(Arrays.asList(
+                "Authorization"
+        ));
+
+        config.setAllowCredentials(true);
+
+        config.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration("/**", config);
+
         return source;
     }
+
+
+
 
     @Bean
     public AuthenticationProvider authenticationProvider() {

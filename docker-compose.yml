@@ -1,0 +1,51 @@
+services:
+
+  db:
+    image: mysql:8
+    container_name: backend-db
+
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+   
+
+    volumes:
+      - db_data:/var/lib/mysql
+
+    restart: always
+
+
+  backend:
+    build: ./backend/demo
+    container_name: springboot_app
+
+    depends_on:
+      - db
+
+    env_file:
+      - .env
+
+    ports:
+      - "8080:8080"
+
+    restart: always
+
+
+  frontend:
+    build: ./frontend/frontend-cms
+    container_name: angular_ssr
+
+    depends_on:
+      - backend
+
+    ports:
+      - "4000:4000"
+
+    restart: always
+
+
+volumes:
+  db_data:

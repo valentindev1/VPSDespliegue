@@ -22,7 +22,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
 
-    // ✅ REGISTER
+    //  REGISTER
     public String register(UsuarioRequestDTO requestDTO) {
 
         if (usuarioRepository.existsByEmail(requestDTO.getEmail())) {
@@ -34,10 +34,10 @@ public class AuthService {
         usuario.setNombre(requestDTO.getNombre());
         usuario.setApellido(requestDTO.getApellido());
 
-        // 🔐 CRÍTICO
+        //  CRÍTICO
         usuario.setPassword(passwordEncoder.encode(requestDTO.getPassword()));
 
-        // ✅ Seguridad: NO dejar que el cliente decida rol
+        //  Seguridad: NO dejar que el cliente decida rol
         usuario.setRol(RolUsuario.USER);
 
         usuarioRepository.save(usuario);
@@ -45,7 +45,7 @@ public class AuthService {
         return jwtService.generateToken(usuario);
     }
 
-    // ✅ LOGIN
+    //  LOGIN
     public String login(String email, String password) {
 
         authenticationManager.authenticate(

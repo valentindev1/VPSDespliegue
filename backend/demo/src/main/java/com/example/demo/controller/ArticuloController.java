@@ -13,13 +13,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/articulo")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
+
 public class ArticuloController {
 
     private final ArticuloService articuloService;
 
     // =========================
-    // ✅ CREAR (multipart)
+    //  CREAR (multipart)
     // =========================
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/crear", consumes = "multipart/form-data")
@@ -28,7 +28,7 @@ public class ArticuloController {
     }
 
     // =========================
-    // ✅ LISTAR
+    //  LISTAR
     // =========================
     @GetMapping("/listar")
     public List<ArticuloResponseDTO> listar() {
@@ -36,7 +36,7 @@ public class ArticuloController {
     }
 
     // =========================
-    // ✅ OBTENER POR ID
+    //  OBTENER POR ID
     // =========================
     @GetMapping("/listar/{id}")
     public ArticuloResponseDTO obtenerPorId(@PathVariable Long id) {
@@ -44,7 +44,7 @@ public class ArticuloController {
     }
 
     // =========================
-    // ✅ OBTENER POR SLUG
+    //  OBTENER POR SLUG
     // =========================
     @GetMapping("/listar/slug/{slug}")
     public ArticuloResponseDTO obtenerPorSlug(@PathVariable String slug) {
@@ -52,7 +52,7 @@ public class ArticuloController {
     }
 
     // =========================
-    // ✅ PRO: CATEGORIA + SLUG
+    //  PRO: CATEGORIA + SLUG
     // =========================
     @GetMapping("/{categoriaSlug}/{articuloSlug}")
     public ArticuloResponseDTO obtenerPorCategoriaYSlug(
@@ -63,7 +63,7 @@ public class ArticuloController {
     }
 
     // =========================
-    // ✅ ACTUALIZAR (multipart también 🔥)
+    //  ACTUALIZAR (multipart también )
     // =========================
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/actualizar/{id}", consumes = "multipart/form-data")
@@ -75,7 +75,7 @@ public class ArticuloController {
     }
 
     // =========================
-    // ✅ ELIMINAR
+    //  ELIMINAR
     // =========================
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/eliminar/{id}")
